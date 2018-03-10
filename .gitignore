@@ -1,2 +1,4 @@
 *__
 .idea/
+secret_keys.py
+.DS_Store
