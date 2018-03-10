@@ -9,9 +9,6 @@ TODO: most recent or popular?
 import requests
 import base64
 import nltk
-#nltk.download('punkt')
-#nltk.download('averaged_perceptron_tagger')
-#nltk.download('stopwords')
 from nltk.corpus import stopwords
 import string
 import re
@@ -22,6 +19,10 @@ from flask import jsonify
 from textblob import TextBlob
 from secret_keys import client_key
 from secret_keys import client_secret
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('stopwords')
+
 app = Flask(__name__)
 
 base_url = 'https://api.twitter.com/'
@@ -256,5 +257,3 @@ def clean_tweet(listOfTweets, filterType, queryWord):
 
 if __name__== '__main__':
     app.run(debug=False)
-
-
