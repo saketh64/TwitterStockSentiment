@@ -57,10 +57,6 @@ def set_auth_header():
 
 search_headers = set_auth_header()
 
-
-
-print(client_key)
-
 @app.route('/getresults')
 def index():
     results = {}
@@ -68,7 +64,6 @@ def index():
     query = request.args.get('query')
     keyword_filter = request.args.get('filter')
     tweets = get_tweets(query)
-    print(tweets)
     sentiment = get_overall_sentiment(tweets)
     results['sentiment'] = sentiment
     words = get_most_related_words(tweets, keyword_filter, query)
@@ -243,7 +238,6 @@ def clean_tweet(listOfTweets, filterType, queryWord):
 
             filteredTweet = re.sub(r'[^\w\s]', '', filteredTweet)
             filteredTweets += filteredTweet + " "
-            #print (filteredTweets)
 
 
 
