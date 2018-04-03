@@ -166,6 +166,8 @@ def clean_tweet(listOfTweets, filterType, queryWord):
 
     #Obtaining all stop words
     cachedStopWords = set(stopwords.words("english"))
+    cachedStopWordsCapitals = set([i.capitalize() for i in stopwords.words("english")])
+    print(cachedStopWordsCapitals)
 
     #Loop through all the tweets
 
@@ -176,7 +178,7 @@ def clean_tweet(listOfTweets, filterType, queryWord):
         #---------------------------------------------Pre Processing the tweets --------------------------------------------------
 
         #Eliminates stop words
-        filteredTweet = ' '.join([word for word in filteredTweet.split() if word not in cachedStopWords])
+        filteredTweet = ' '.join([word for word in filteredTweet.split() if word not in (cachedStopWords and cachedStopWordsCapitals)])
 
         filteredTweet = filteredTweet.replace('RT', "")
 
