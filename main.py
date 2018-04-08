@@ -29,8 +29,6 @@ base_url = 'https://api.twitter.com/'
 search_url = '{}1.1/search/tweets.json'.format(base_url)
 
 def set_auth_header():
-    client_key = 'CAyOqosKb6fU86YC1a8zxV2l0'
-    client_secret = 'PTCnPc4EmCx0vV9UNQxY5AVz07j2y3QXAkf4dweQfayoDmyqLp'
 
     key_secret = '{}:{}'.format(client_key, client_secret).encode('ascii')
     b64_encoded_key = base64.b64encode(key_secret)
@@ -102,37 +100,6 @@ def get_tweet_sentiment(tweet):
 
 
 '''
-Function that sets the authorization header
-Returns the Authorization header
-'''
-def set_auth_header():
-    client_key = 'CAyOqosKb6fU86YC1a8zxV2l0'
-    client_secret = 'PTCnPc4EmCx0vV9UNQxY5AVz07j2y3QXAkf4dweQfayoDmyqLp'
-
-    key_secret = '{}:{}'.format(client_key, client_secret).encode('ascii')
-    b64_encoded_key = base64.b64encode(key_secret)
-    b64_encoded_key = b64_encoded_key.decode('ascii')
-
-
-    base_url = 'https://api.twitter.com/'
-    auth_url = '{}oauth2/token'.format(base_url)
-
-    auth_headers = {
-        'Authorization': 'Basic {}'.format(b64_encoded_key),
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-    }
-
-    auth_data = {
-        'grant_type': 'client_credentials'
-    }
-
-    auth_resp = requests.post(auth_url, headers=auth_headers, data=auth_data)
-
-    access_token = auth_resp.json()['access_token']
-
-    return { 'Authorization': 'Bearer {}'.format(access_token) }
-
-'''
 Function that gets the 100 most tweets for a specific query
 Returns a list of the 100 tweets
 '''
@@ -167,7 +134,6 @@ def clean_tweet(listOfTweets, filterType, queryWord):
     #Obtaining all stop words
     cachedStopWords = set(stopwords.words("english"))
     cachedStopWordsCapitals = set([i.capitalize() for i in stopwords.words("english")])
-    print(cachedStopWordsCapitals)
 
     #Loop through all the tweets
 
