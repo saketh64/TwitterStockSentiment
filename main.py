@@ -124,10 +124,26 @@ def get_tweets(query):
 
     search_resp = requests.get(search_url, headers=search_headers, params=search_params)
     tweet_data = search_resp.json()
+    max_id = tweet_data['search_metadata']['max_id']
     tweets = []
     for x in tweet_data['statuses']:
         tweets.append(x['text'])
 
+    for i in range(5):
+        search_params = {
+            'q': query,
+            'result_type': 'recent',
+            'exclude':'retweets',
+            'count': 100,
+            'max_id': max_id
+        }
+        search_resp = requests.get(search_url, headers=search_headers, params=search_params)
+        tweet_data = search_resp.json()
+        max_id = tweet_data['search_metadata']['max_id']
+        for x in tweet_data['statuses']:
+            tweets.append(x['text'])
+
+    print(len(tweets))
     return tweets
 
 
