@@ -77,13 +77,13 @@ def index():
     results['related_sentiments'] = word_sentiments
 
     # UNCOMMENT THIS TO PRINT LOGS TO FILE (not during testing)
-    """
+
     with open('data.txt', 'a') as outfile:
         now = datetime.datetime.now()
         outfile.write(query + ", Filter: " + keyword_filter + ", Date: " + str(now.year) + "-" + str(now.month) + "-" + str(now.day) + "\n")
         json.dump(results, outfile)
         outfile.write("\n")
-    """
+    
 
     return jsonify(results)
 
