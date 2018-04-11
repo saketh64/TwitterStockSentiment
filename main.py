@@ -57,6 +57,12 @@ def set_auth_header():
 
 search_headers = set_auth_header()
 
+@app.route("/getpastdata")
+def test():
+    with open('data.txt', 'r') as outfile:
+        test = json.load(outfile)
+        return jsonify(test)
+
 @app.route('/getresults')
 def index():
     results = {}
@@ -80,10 +86,10 @@ def index():
 
     with open('data.txt', 'a') as outfile:
         now = datetime.datetime.now()
-        outfile.write(query + ", Filter: " + keyword_filter + ", Date: " + str(now.year) + "-" + str(now.month) + "-" + str(now.day) + "\n")
+        outfile.write("{\"name\": \"" + query + "\", \"filter\": \"" + keyword_filter + "\", \"date\": \"" + str(now.year) + "-" + str(now.month) + "-" + str(now.day) + "\", \"data\": ")
         json.dump(results, outfile)
-        outfile.write("\n")
-    
+        outfile.write("},\n")
+
 
     return jsonify(results)
 
