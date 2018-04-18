@@ -224,8 +224,10 @@ def clean_tweet(listOfTweets, filterType, queryWord):
             punctuation = punctuation.replace('@', "").replace('#', "").replace('$', "")
 
             words = [''.join(c for c in s if c not in punctuation) for s in words]
+            
             for word in words:
-                if word and word[0] != '#' and word[0] != '$' and word[0] != '@' and word != "...":
+                word = word.replace("’", "")   
+                if word and word[0] != '#' and word[0] != '$' and word[0] != '@' and word != "..." and word != '\'' :
                     newFilteredTweet += word + " "
             # function to test if something is a noun
             is_noun = lambda pos: pos[:2] == 'NN'
