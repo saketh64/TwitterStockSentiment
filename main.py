@@ -30,6 +30,8 @@ app = Flask(__name__)
 base_url = 'https://api.twitter.com/'
 search_url = '{}1.1/search/tweets.json'.format(base_url)
 
+data = []
+
 def set_auth_header():
 
     key_secret = '{}:{}'.format(client_key, client_secret).encode('ascii')
@@ -58,10 +60,43 @@ def set_auth_header():
 search_headers = set_auth_header()
 
 @app.route("/getpastdata")
-def test():
+def pastdata():
+    stock = request.args.get('name')
+
     with open('data.txt', 'r') as outfile:
-        test = json.load(outfile)
-        return jsonify(test)
+        data = json.load(outfile)
+
+        result = {}
+        result["C"] = getdataforstockfilter(stock, "C", data)
+        result["D"] = getdataforstockfilter(stock, "D", data)
+        result["H"] = getdataforstockfilter(stock, "H", data)
+        result["N"] = getdataforstockfilter(stock, "N", data)
+        result["None"] = getdataforstockfilter(stock, "None", data)
+
+        return jsonify(result)
+
+def getdataforstockfilter(stock, filter, data):
+    result = []
+    associatedWords = [x["data"]["related_sentiments"] for x in data["main"] if (x["name"] == stock) and (x["filter"] == filter)]
+    words = {}
+    for item in associatedWords:
+        for word in item.keys():
+            if (word in words.keys()):
+                words[word] += 1
+            else:
+                words[word] = 1
+    mostFrequentWords = dict(Counter(words).most_common(5))
+    for word in mostFrequentWords.keys():
+        values = []
+        for item in associatedWords:
+            if (word in item.keys()):
+                values.append({"value": item[word]})
+            else:
+                values.append({"value": 0})
+        item = [{"word": word}, {"values": values}]
+        result.append(item)
+
+    return result
 
 @app.route('/getresults')
 def index():
@@ -224,9 +259,9 @@ def clean_tweet(listOfTweets, filterType, queryWord):
             punctuation = punctuation.replace('@', "").replace('#', "").replace('$', "")
 
             words = [''.join(c for c in s if c not in punctuation) for s in words]
-            
+
             for word in words:
-                word = word.replace("’", "")   
+                word = word.replace("’", "")
                 if word and word[0] != '#' and word[0] != '$' and word[0] != '@' and word != "..." and word != '\'' :
                     newFilteredTweet += word + " "
             # function to test if something is a noun
