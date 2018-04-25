@@ -63,6 +63,10 @@ search_headers = set_auth_header()
 def pastdata():
     stock = request.args.get('name')
 
+    stockData = []
+    with open('stockdata.txt', 'r') as stockFile:
+        stockData = json.load(stockFile)
+
     with open('data.txt', 'r') as outfile:
         data = json.load(outfile)
 
@@ -72,6 +76,7 @@ def pastdata():
         result["H"] = getdataforstockfilter(stock, "H", data)
         result["N"] = getdataforstockfilter(stock, "N", data)
         result["None"] = getdataforstockfilter(stock, "None", data)
+        result["stockPrice"] = stockData[stock]
 
         return jsonify(result)
 
@@ -90,9 +95,9 @@ def getdataforstockfilter(stock, filter, data):
         values = []
         for item in associatedWords:
             if (word in item.keys()):
-                values.append({"value": item[word]})
+                values.append({"value": str(item[word])})
             else:
-                values.append({"value": 0})
+                values.append({"value": str(0)})
         item = [{"word": word}, {"values": values}]
         result.append(item)
 
